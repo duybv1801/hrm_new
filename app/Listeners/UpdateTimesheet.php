@@ -40,22 +40,16 @@ class UpdateTimesheet implements ShouldQueue
             $checkIn = Carbon::parse($timesheet->in_time);
             $checkOut = Carbon::parse($timesheet->out_time);
             $settings = $this->settingRepository->getTimeLunch();
-            $breakStartTime = Carbon::createFromFormat(config('define.time'), $settings['lunch_time_start']);
-            $breakEndTime = Carbon::createFromFormat(config('define.time'), $settings['lunch_time_end']);
-            $totalDuration = $checkOut->diffInMinutes($checkIn);
 
-            if ($checkOut->gt($breakEndTime) && $checkIn->lt($breakStartTime)) {
-                $totalDuration -= $breakEndTime->diffInMinutes($breakStartTime);
+            $in = $checkIn->toTimeString();
+            $out = $checkOut->toTimeString();
+            $totalDuration = calculator_working_hours($in, $out);
+
+            if ($totalDuration > $settings['max_working_minutes_everyday_day'])
+            {
+                $totalDuration = $settings['max_working_minutes_everyday_day'];
             }
-            if (($checkIn->lt($breakEndTime) && $checkIn->gt($breakStartTime)) || ($checkOut->lt($breakEndTime) && $checkOut->gt($breakStartTime))) {
-                $overlapStart = $checkIn->max($breakStartTime);
-                $overlapEnd = $checkOut->min($breakEndTime);
-                $overlapDuration = $overlapEnd->diffInMinutes($overlapStart);
-                $totalDuration -= $overlapDuration;
-            }
-            if ($totalDuration > $settings['max_working_minutes_everyday_day'] * config('define.hour')) {
-                $totalDuration = $settings['max_working_minutes_everyday_day'] * config('define.hour');
-            }
+
             $data['working_hours'] = $totalDuration;
             if (
                 $totalDuration + $timesheet->leave_hours + $timesheet->remote_hours >= $settings['working_time'] * config('define.hour')

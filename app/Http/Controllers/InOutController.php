@@ -34,6 +34,7 @@ class InOutController extends Controller
         $data['record_date'] = now()->format(config('define.date_search'));
         $data['check_in'] = now()->format(config('define.time'));
         $data['in_time'] = $data['check_in'];
+        $data['status'] = 2;
         $timesheet = $this->timesheetRepository->create($data);
         $mail = $user->email;
         $name = $user->name;

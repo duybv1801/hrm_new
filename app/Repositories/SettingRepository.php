@@ -106,6 +106,7 @@ class SettingRepository extends BaseRepository
             'lunch_time_start',
             'lunch_time_end',
             'working_time',
+            'block',
             'max_working_minutes_everyday_day',
         ];
         $timeLunch = $this->model->whereIn('key', $keys)->pluck('value', 'key');

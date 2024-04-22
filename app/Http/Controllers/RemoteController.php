@@ -69,7 +69,8 @@ class RemoteController  extends AppBaseController
         $request->validated();
         $totalHours = $request->total_hours;
         $input = $request->all();
-        $input['total_hours'] = $totalHours;
+        $input['total_hours'] = round($totalHours / 60, 2);
+
         $input['status'] = config('define.remotes.pending');
 //        $input['cc'] = json_encode($request->input('cc'));
 //        $ccIds = json_decode($input['cc'], true);
