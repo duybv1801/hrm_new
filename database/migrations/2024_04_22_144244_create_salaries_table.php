@@ -18,6 +18,8 @@ class CreateSalariesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->date('time');
             $table->unsignedBigInteger('gross');
+            $table->float('required_time', 3, 2);
+            $table->float('total_time', 3, 2);
             $table->unsignedBigInteger('tax')->default(0);
             $table->unsignedBigInteger('insurance')->default(0);
             $table->unsignedBigInteger('advance_payment')->default(0);

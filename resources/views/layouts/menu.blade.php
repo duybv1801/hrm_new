@@ -146,42 +146,7 @@
     @endcan
 </li>
 
-<li class="nav-item {{ Request::is('holidays*') ? 'active menu-open' : '' }}">
-    @can('update', App\Models\Holiday::class)
-        <a href="" class="nav-link">
-            <i class="fas fa-gift"></i>
-            <p>
-                {{ trans('Holidays') }}
-                <i class="fas fa-angle-left right"></i>
-            </p>
-        </a>
-        <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <a href="{!! route('holidays.calendar') !!}" class="nav-link {{ Request::is('holidays/calendar') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p> {{ trans('holiday.calendar') }}</p>
-                </a>
-            </li>
-        </ul>
-        <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <a href="{!! route('holidays.index') !!}" class="nav-link {{ Request::is('holidays') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p> {{ trans('Manage Holidays') }}</p>
-                </a>
-            </li>
-        </ul>
-    @else
-        <a href="{!! route('holidays.calendar') !!}" class="nav-link">
-            <i class="fas fa-gift"></i>
-            <p>
-                {{ trans('Holidays') }}
-            </p>
-        </a>
-    @endcan
-</li>
-
-{{-- Registration Remote --}}
+{{-- Remote --}}
 <li class="nav-item {{ Request::is('remote*') || Request::is('manager_remote*') ? 'active menu-open' : '' }}">
     @can('viewAny', App\Models\Remote::class)
         <a href="#" class="nav-link">
@@ -227,7 +192,7 @@
     @endcan
 </li>
 
-{{-- Registration leave --}}
+{{-- Leave --}}
 <li class="nav-item {{ Request::is('leaves*') || Request::is('manager_leave*') ? 'active menu-open' : '' }}">
     @can('viewAny', App\Models\Leave::class)
         <a href="#" class="nav-link">
@@ -267,6 +232,93 @@
             <i class="fas fa-toggle-off"></i>
             <p>
                 {{ trans('leave.leave') }}
+            </p>
+        </a>
+    @endcan
+</li>
+
+{{-- Salary --}}
+<li class="nav-item {{ Request::is('salaries*') ? 'active menu-open' : '' }}">
+    @can('viewAny', App\Models\Salary::class)
+        <a href="#" class="nav-link">
+            <i class="fas fa-dollar-sign"></i>
+            <p>
+                {{ trans('Salary') }}
+                <i class="fas fa-angle-left right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{!! route('salaries.index') !!}" class="nav-link {{ Request::is('salaries') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p> {{ trans('Registration') }}</p>
+{{--                    <span class=" badge bg-danger">--}}
+{{--                        {{ $registerLeaves }}--}}
+{{--                    </span>--}}
+
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="" class="nav-link {{ Request::is('salaries/manage') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p> {{ trans('Approve') }}
+                        @if (Auth::user()->hasRole('po'))
+{{--                            <span class=" badge bg-danger">--}}
+{{--                                {{ $unreadNotificationLeave }}--}}
+{{--                            </span>--}}
+                        @endif
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="" class="nav-link {{ Request::is('salaries/manage') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p> {{ trans('Bảng lương') }}</p>
+                </a>
+            </li>
+        </ul>
+    @else
+        <a href="{!! route('salaries.index') !!}" class="nav-link"
+           title="{{ trans('Number of applications that have not been approved/confirmed') }}">
+            <i class="fas fa-toggle-off"></i>
+            <p>
+                {{ trans('salary') }}
+            </p>
+        </a>
+    @endcan
+</li>
+
+{{-- Holiday --}}
+<li class="nav-item {{ Request::is('holidays*') ? 'active menu-open' : '' }}">
+    @can('update', App\Models\Holiday::class)
+        <a href="" class="nav-link">
+            <i class="fas fa-gift"></i>
+            <p>
+                {{ trans('Holidays') }}
+                <i class="fas fa-angle-left right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{!! route('holidays.calendar') !!}" class="nav-link {{ Request::is('holidays/calendar') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p> {{ trans('holiday.calendar') }}</p>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{!! route('holidays.index') !!}" class="nav-link {{ Request::is('holidays') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p> {{ trans('Manage Holidays') }}</p>
+                </a>
+            </li>
+        </ul>
+    @else
+        <a href="{!! route('holidays.calendar') !!}" class="nav-link">
+            <i class="fas fa-gift"></i>
+            <p>
+                {{ trans('Holidays') }}
             </p>
         </a>
     @endcan

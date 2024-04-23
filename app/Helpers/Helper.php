@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Setting;
+use App\Models\Holiday;
 use Carbon\Carbon;
 
 if (!function_exists('calculator_working_hours')) {
@@ -30,7 +31,6 @@ if (!function_exists('calculator_working_hours')) {
         $endAfternoon = max($startAfternoon, min($out, $endWorkingDay));
         $minuteAfternoon = $startAfternoon->diffInMinutes($endAfternoon);
 
-
         $totalMinute =  $minuteMorning + $minuteAfternoon;
         $maxTimeWorkingDay = (int) $setting['max_working_minutes_everyday_day'] * config('define.hour');
         $recordTime = min($totalMinute, $maxTimeWorkingDay);
@@ -39,4 +39,35 @@ if (!function_exists('calculator_working_hours')) {
         $minutes = floor($recordTime / $block) * $block;
         return $minutes / config('define.hour');
     }
+
+    function calTotalHours($start, $end)
+    {
+        $day = 0;
+        while ($start->lte($end)) {
+            $startCheck = $start->format(config('define.date_show'));
+            if (!$start->isWeekend() && !isHoliday($startCheck)) {
+                $day++;
+            }
+            $start->addDay();
+        }
+        $workingTime = Setting::where('key', 'working_time')->value('value');
+        $hourPerDay = (int) $workingTime;
+
+        return $day * $hourPerDay;
+    }
+
+    function isHoliday($date)
+    {
+        $holidayDates = Holiday::pluck('date')->toArray();
+        $dateFormatted = Carbon::createFromFormat(config('define.date_show'), $date)->format(config('define.date_show'));
+        $holidayDates = array_map(
+            function ($holidayDate) {
+                return Carbon::parse($holidayDate)->format(config('define.date_show'));
+            },
+            $holidayDates
+        );
+
+        return in_array($dateFormatted, $holidayDates);
+    }
+
 }

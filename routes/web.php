@@ -15,6 +15,7 @@ use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\OvertimeController;
 use App\Http\Controllers\ManagerLeaveController;
 use App\Http\Controllers\InOutController;
+use App\Http\Controllers\SalaryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/inout/checkin', [InOutController::class, 'checkIn'])->name('inout.checkin');
     Route::post('/inout/checkout', [InOutController::class, 'checkOut'])->name('inout.checkout');
 
-    //manager staff 
+    //manager staff
     Route::get('manager_staff', [ManagerStaffController::class, 'index'])->name('manager_staff.index')->middleware('can:viewAny,App\Models\User');
     Route::get('manager_staff/create', [ManagerStaffController::class, 'create'])->name('manager_staff.create')->middleware('can:create,App\Models\User');
     Route::post('manager_staff', [ManagerStaffController::class, 'store'])->name('manager_staff.store');
@@ -106,7 +107,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('manager_leave/confirming/{id}', [ManagerLeaveController::class, 'confirming'])->name('manager_leave.confirming')->middleware('can:update,App\Models\Leave');
     Route::put('manager_leave/approve/{id}', [ManagerLeaveController::class, 'approve'])->name('manager_leave.approve')->middleware('can:update,App\Models\Leave');
 
-    //setting 
+    //setting
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index')->middleware('can:update,App\Models\Setting');
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update')->middleware('can:update,App\Models\Setting');
 
@@ -132,6 +133,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/overtimes/approve/{id}', [OvertimeController::class, 'approve'])->name('overtimes.approve')->middleware('can:approve,App\Models\Overtime');
     Route::put('/overtimes/approve/{id}', [OvertimeController::class, 'approveAction'])->name('overtimes.approveAction')->middleware('can:approve,App\Models\Overtime');
     Route::get('/overtimes/details/{id}', [OvertimeController::class, 'details'])->name('overtimes.details')->middleware('can:details,App\Models\Overtime,id');
+
+    //salary
+    Route::get('/salaries', [SalaryController::class, 'index'])->name('salaries.index');
 });
 
 //password mail

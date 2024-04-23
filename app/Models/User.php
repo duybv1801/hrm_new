@@ -85,4 +85,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Leave::class);
     }
+
+    public function salaries()
+    {
+        return $this->hasMany(Salary::class);
+    }
+
+    public function timesheets()
+    {
+        return $this->hasMany(Timesheet::class);
+    }
 }

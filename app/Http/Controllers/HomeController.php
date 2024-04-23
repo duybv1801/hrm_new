@@ -98,7 +98,7 @@ class HomeController extends Controller
                 $checkIn = Carbon::parse($timesheet->in_time)->format(config('define.time'));
                 $checkOut = Carbon::parse($timesheet->out_time)->format(config('define.time'));
                 $workingHours = $timesheet->working_hours;
-                $overtimeHours = round($timesheet->overtime_hours / config('define.hour'), config('define.decimal'));
+                $overtimeHours = $timesheet->overtime_hours;
                 $leaveHours = round($timesheet->leave_hours / config('define.hour'), config('define.decimal'));
                 $status = $timesheet->status;
             } else {
@@ -127,8 +127,9 @@ class HomeController extends Controller
         $date = now()->format(config('define.date_search'));
         $data['checkRemote'] = $this->remoteRepository->checkRemoteTime($userId, $date);
         $data['checkRemoteCheckIn'] = $data['checkRemote'] && $this->timesheetRepository->checkRemoteCheckIn($userId, $date);
-        $data['workingHours'] = $this->timesheetRepository->getWorkingHours($conditions) + $countHoliday * $hourPerDay;
-        $data['totalHours'] = $this->calTotalHours($startDate, $endDate);
+        $data['workingHours'] = $this->timesheetRepository->getWorkingHours($conditions);
+        $data['totalHours'] = calTotalHours(Carbon::createFromFormat(config('define.date_show'), $startDate),
+                                            Carbon::createFromFormat(config('define.date_show'), $endDate));
 
         $dataCollection = new Collection($data['timesheetData']);
         $perPage = config('define.paginate');
