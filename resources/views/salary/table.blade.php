@@ -57,16 +57,16 @@
                             @endphp
                             @forelse ($salaries as $salary)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $i++ }}</td>
                                     <td>{{ $salary->user->name }}</td>
-                                    <td>{{ $salary->gross }}</td>
+                                    <td>{{ number_format($salary->gross, 0, ',', '.') }}đ</td>
                                     <td>{{ $salary->required_time }}</td>
                                     <td>{{ $salary->total_time }}</td>
-                                    <td>{{ $salary->tax }}</td>
-                                    <td>{{ $salary->insurance }}</td>
-                                    <td>{{ $salary->advance_payment }}</td>
-                                    <td>{{ $salary->reward }}</td>
-                                    <td>{{ $salary->NET }}</td>
+                                    <td>{{ number_format($salary->tax, 0, ',', '.') }}đ</td>
+                                    <td>{{ number_format($salary->insurance, 0, ',', '.') }}đ</td>
+                                    <td>{{ number_format($salary->advance_payment, 0, ',', '.') }}đ</td>
+                                    <td>{{ number_format($salary->reward, 0, ',', '.') }}đ</td>
+                                    <td>{{ number_format($salary->NET, 0, ',', '.') }}đ</td>
                                 </tr>
                             @empty
                                 <tr>
@@ -79,7 +79,9 @@
                 </div>
 
                 <div class="pagination justify-content-center">
-                    {{ $salaries->appends([$_GET])->links() }}
+                    {{ $salaries->appends([
+                            'time' => request()->input('time'),
+                        ])->links() }}
                 </div>
             </div>
         </div>

@@ -94,7 +94,7 @@
                                     <td>{{ $managerLeave->getName() }}</td>
                                     <td>{{ $managerLeave->from_datetime->format(config('define.datetime')) }}</td>
                                     <td>{{ $managerLeave->to_datetime->format(config('define.datetime')) }}</td>
-                                    <td>{{ round($managerLeave->total_hours / config('define.hour'), config('define.decimal')) }}
+                                    <td>{{ $managerLeave->total_hours }}
                                     </td>
                                     @if (!Auth::user()->hasRole('po'))
                                         <td>{{ $managerLeave->getApprove() }}</td>

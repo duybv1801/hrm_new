@@ -82,7 +82,7 @@ class LeaveController extends AppBaseController
     public function store(CreateLeaveRequest $request)
     {
         $user = $this->userReponsitory->find(Auth::user()->id);
-        $totalHours = $request->total_hours;
+        $totalHours = round($request->total_hours /60, 2);
         $type = $request->type;
         $input = $request->all();
 
@@ -110,12 +110,12 @@ class LeaveController extends AppBaseController
         }
 
         $input['total_hours'] = $totalHours;
-        $input['cc'] = json_encode($request->input('cc'));
-        $ccIds = json_decode($input['cc'], true);
+//        $input['cc'] = json_encode($request->input('cc'));
+//        $ccIds = json_decode($input['cc'], true);
         $approverId = $input['approver_id'];
 
-        $getEmail = $this->userReponsitory->getEmailsByPosition($approverId);
-        $email = $getEmail->email;
+//        $getEmail = $this->userReponsitory->getEmailsByPosition($approverId);
+//        $email = $getEmail->email;
         $avatar = $request->file('evident');
 
         if ($avatar) {

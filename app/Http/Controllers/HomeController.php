@@ -169,9 +169,7 @@ class HomeController extends Controller
         $data['timesheetData']->getCollection()->transform(function ($item) {
             $item->in_time = Carbon::parse($item->in_time)->format(config('define.time'));
             $item->out_time = Carbon::parse($item->out_time)->format(config('define.time'));
-            $item->working_hours = $item->working_hours;
             $item->leave_hours = round($item->leave_hours / config('define.hour'), config('define.decimal'));
-            $item->overtime_hours = round($item->overtime_hours / config('define.hour'), config('define.decimal'));
             $item->record_date = Carbon::parse($item->record_date)->format(config('define.date_show'));
             return $item;
         });

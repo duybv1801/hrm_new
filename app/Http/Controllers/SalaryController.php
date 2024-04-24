@@ -8,6 +8,7 @@ use App\Repositories\UserRepository;
 use App\Services\SalaryService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Laracasts\Flash\Flash;
 
 class SalaryController extends Controller
 {
@@ -45,8 +46,11 @@ class SalaryController extends Controller
 
         $users = $this->userRepository->getUserCalSalary($userIds, $start, $end);
         $totalHours = calTotalHours($start, $end);
-        if($this->salaryService->calAndStoreSalaries($users, $userIds, $totalHours, $end))
-            return redirect()->route('salaries.index')->with('success', 'Tính lương thành công');
-        return redirect()->route('salaries.index')->with('error', 'Có lỗi rồi');
+        if($this->salaryService->calAndStoreSalaries($users, $userIds, $totalHours, $end)) {
+            Flash::success(trans('Tính lương thành công'));
+            return redirect()->route('salaries.index');
+        }
+        Flash::error(trans('Có lỗi rồi'));
+        return redirect()->route('salaries.index');
     }
 }

@@ -243,7 +243,7 @@
         <a href="#" class="nav-link">
             <i class="fas fa-dollar-sign"></i>
             <p>
-                {{ trans('Salary') }}
+                {{ trans('Lương, thưởng') }}
                 <i class="fas fa-angle-left right"></i>
             </p>
         </a>
@@ -251,7 +251,7 @@
             <li class="nav-item">
                 <a href="" class="nav-link {{ Request::is('salaries/aaa') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p> {{ trans('Registration') }}</p>
+                    <p> {{ trans('Tạm ứng') }}</p>
 {{--                    <span class=" badge bg-danger">--}}
 {{--                        {{ $registerLeaves }}--}}
 {{--                    </span>--}}
@@ -261,7 +261,7 @@
             <li class="nav-item">
                 <a href="" class="nav-link {{ Request::is('salaries/manage') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p> {{ trans('Approve') }}
+                    <p> {{ trans('Duyệt tạm ứng') }}
                         @if (Auth::user()->hasRole('po'))
 {{--                            <span class=" badge bg-danger">--}}
 {{--                                {{ $unreadNotificationLeave }}--}}

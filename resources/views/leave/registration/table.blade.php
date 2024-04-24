@@ -61,11 +61,11 @@
                 <h5 class="text-danger" style="margin-bottom: 20px">
                     <span style="margin-right: 30px">
                         {{ trans('Remaining vacation time') }}:
-                        {{ round(Auth::user()->leave_hours_left / config('define.hour'), config('define.decimal')) }}h
+                        {{ Auth::user()->leave_hours_left  }}h
                     </span>
                     @if (Auth::user()->leave_hours_left_in_month != 0)
                         {{ trans('Remaining leave time by month') }}:
-                        {{ round(Auth::user()->leave_hours_left_in_month / config('define.hour'), config('define.decimal')) }}h
+                        {{ Auth::user()->leave_hours_left_in_month }}h
                     @endif
 
                 </h5>
@@ -105,7 +105,7 @@
                                         <td> {{ $i++ }}</td>
                                         <td>{{ $leave->from_datetime->format(config('define.datetime')) }}</td>
                                         <td>{{ $leave->to_datetime->format(config('define.datetime')) }} </td>
-                                        <td>{{ round($leave->total_hours / config('define.hour'), config('define.decimal')) }}
+                                        <td>{{ $leave->total_hours }}
                                         <td>{{ $leave->getApprove() }}</td>
                                         <td>
                                             <span class="{!! trans('leave.type.label ' . $leave->type) !!}">
