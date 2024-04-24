@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repositories;
 
@@ -69,6 +70,7 @@ class UserRepository extends BaseRepository
         $query = $query->orderBy('created_at', 'DESC');
         return $query->paginate(config('define.paginate'));
     }
+
     public function getUsersByPosition($roleId)
     {
         return $this->model->where('role_id', $roleId)->get();
@@ -96,5 +98,23 @@ class UserRepository extends BaseRepository
     public function getAllUserByCode($code)
     {
         return $this->model->whereIn('code', $code)->get();
+    }
+
+    public function getUserCalSalary($ids = null, $start, $end): array
+    {
+        $start = $start->format('Y-m-d');
+        $end = $end->format('Y-m-d');
+
+        $query = $this->model->with(['timesheets' => function ($query) use ($start, $end) {
+            $query->whereBetween('record_date', [$start, $end])
+                ->select('user_id', 'working_hours', 'overtime_hours', 'leave_hours');
+        }])
+            ->select('id', 'name', 'base_salary', 'allowance', 'contract', 'dependent_person');
+
+        if (!is_null($ids)) {
+            $query->whereIn('id', $ids);
+        }
+
+        return $query->get()->toArray();
     }
 }

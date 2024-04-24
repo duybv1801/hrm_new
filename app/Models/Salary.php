@@ -14,7 +14,7 @@ class Salary extends Model
         'advance_payment', 'reward', 'NET'
     ];
 
-    public function users()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

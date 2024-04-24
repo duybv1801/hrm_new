@@ -1,92 +1,52 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Salary;
+use App\Repositories\SalaryRepository;
+use App\Repositories\UserRepository;
+use App\Services\SalaryService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Models\User;
+
 class SalaryController extends Controller
 {
+    private $salaryService;
+
+    public function __construct(
+        UserRepository $userRepo,
+        SalaryService $salaryService,
+        SalaryRepository $salaryRepo
+    )
+    {
+        $this->userRepository = $userRepo;
+        $this->salaryService = $salaryService;
+        $this->salaryRepository = $salaryRepo;
+    }
+
     public function index(Request $request)
     {
-        if (@$request['month'] && @$request['year']) {
-            $start = Carbon::create($request['year'], $request['month'], 1)->startOfMonth();
-            $end = Carbon::create($request['year'], $request['month'], 1)->endOfMonth();
-        } else {
-            $start = Carbon::now()->startOfMonth();
-            $end = Carbon::now()->endOfMonth();
-        }
+        $time = $request->time ?: Carbon::now()->subMonth()->format('Y-m');
+        $conditions = [
+            'time' => $time,
+        ];
+        $userIds = $request->user_ids ?: null;
+        $data['salaries'] = $this->salaryRepository->searchByConditions($conditions, $userIds);
+        $data['users'] = $this->userRepository->all([], null, null, ['id', 'name']);
 
-        $startTime = $start->format('Y-m-d');
-        $endTime = $end->format('Y-m-d');
+        return view('salary.index', $data);
+    }
+
+    public function calSalary(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $start = Carbon::createFromFormat('Y-m', $request->time)->startOfMonth();
+        $end = Carbon::createFromFormat('Y-m', $request->time)->endOfMonth();
+        $userIds = $request->has('user_ids') ? $request->user_ids : null;
+
+        $users = $this->userRepository->getUserCalSalary($userIds, $start, $end);
         $totalHours = calTotalHours($start, $end);
-
-        if ($request->filled('user_ids')) {
-            $users = User::with(['timesheets' => function ($query) use ($startTime, $endTime) {
-                $query->whereBetween('record_date', [$startTime, $endTime])
-                    ->select('user_id', 'working_hours', 'overtime_hours', 'leave_hours');
-            }])
-                ->whereIn('id', $request->user_ids)
-                ->select('id', 'name', 'base_salary', 'allowance', 'contract', 'dependent_person')
-                ->get()
-                ->toArray();
-        } else {
-            $users = User::with(['timesheets' => function ($query) use ($startTime, $endTime) {
-                $query->whereBetween('record_date', [$startTime, $endTime])
-                    ->select('user_id', 'working_hours', 'overtime_hours', 'leave_hours');
-            }])
-                ->select('id', 'name', 'base_salary', 'allowance', 'contract', 'dependent_person')
-                ->get()
-                ->toArray();
-        }
-
-        $dataToInsert = [];
-        foreach ($users as $user) {
-            $totalWorkingHours = 0;
-            $totalOTHours = 0;
-            $totalLeaveHours = 0;
-            foreach ($user['timesheets'] as $timesheet) {
-                $totalWorkingHours += $timesheet['working_hours'];
-                $totalOTHours += $timesheet['overtime_hours'];
-                $totalLeaveHours += $timesheet['leave_hours'];
-            }
-
-            $totalTime = $totalWorkingHours + $totalOTHours + $totalLeaveHours;
-            $insurance = $user['base_salary'] * 0.105;
-            $taxDependent = $user['base_salary'] - 11000000 - $user['dependent_person'] * 4400000;
-            if ($taxDependent > 0) {
-                $taxRanges = [5000000, 10000000, 18000000, 32000000, 52000000, 80000000];
-                $percentage = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35];
-                foreach ($taxRanges as $index => $range) {
-                    if ($taxDependent <= $range) {
-                        $tax = $taxDependent * $percentage[$index];
-                        break;
-                    }
-                }
-            }
-            if($user['base_salary'] > 2000000 && in_array($user['contract'], [1, 3])) {
-                $tax = $user['base_salary'] * 0.9;
-                $insurance = 0;
-            }
-            $gross = $user['base_salary'] * $totalTime/$totalHours;
-            $dataToInsert[] = [
-                'user_id' => $user['id'],
-                'time' => $end->format('Y-m'),
-                'required_time' => $totalHours,
-                'total_time' => $totalTime,
-                'gross' => $gross,
-                'tax' => $tax,
-                'insurance' => $insurance,
-                'NET' => $gross - $tax - $insurance + $user['allowance'],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        }
-
-        Salary::insert($dataToInsert);
-
-
-        return view('salary.index');
+        if($this->salaryService->calAndStoreSalaries($users, $userIds, $totalHours, $end))
+            return redirect()->route('salaries.index')->with('success', 'Tính lương thành công');
+        return redirect()->route('salaries.index')->with('error', 'Có lỗi rồi');
     }
 }

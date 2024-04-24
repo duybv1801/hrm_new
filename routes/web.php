@@ -136,6 +136,7 @@ Route::middleware(['auth'])->group(function () {
 
     //salary
     Route::get('/salaries', [SalaryController::class, 'index'])->name('salaries.index');
+    Route::post('/salaries/cal', [SalaryController::class, 'calSalary'])->name('salaries.cal');
 });
 
 //password mail

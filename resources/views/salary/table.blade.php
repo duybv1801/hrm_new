@@ -11,37 +11,14 @@
                                 {{-- from date --}}
                                 <div class="col-2">
                                     <div class="form-group">
-                                        <label for="search_from">{{ trans('From Date') }}</label>
-                                        <div class="input-group date reservationdate" id="reservationdate_from"
-                                             data-target-input="nearest">
-                                            <input type="text" class="form-control datetimepicker-input"
-                                                   data-target="#reservationdate_from" data-toggle="datetimepicker"
-                                                   name="start_date" id="search_from"
-                                                   value="{{ request('start_date',now()->startOfMonth()->format(config('define.date_show'))) }}" />
-                                            <div class="input-group-append" data-target="#reservationdate_from"
-                                                 data-toggle="datetimepicker">
-                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                            </div>
+                                        <label for="search_from">{{ trans('Thời gian') }}</label>
+                                        <div class="input-group">
+                                            <input type="month" id="month" name="time" class="form-control"
+                                                   value="{{ request('time') ?? \Carbon\Carbon::now()->subMonth()->format('Y-m') }}">
                                         </div>
                                     </div>
                                 </div>
                                 {{-- todate --}}
-                                <div class="col-2">
-                                    <div class="form-group">
-                                        <label for="search_to">{{ trans('To Date') }}</label>
-                                        <div class="input-group date reservationdate" id="reservationdate_to"
-                                             data-target-input="nearest">
-                                            <input type="text" class="form-control datetimepicker-input"
-                                                   data-target="#reservationdate_to" data-toggle="datetimepicker"
-                                                   name="end_date" id="search_to"
-                                                   value="{{ request('end_date',now()->endOfMonth()->format(config('define.date_show'))) }}" />
-                                            <div class="input-group-append" data-target="#reservationdate_to"
-                                                 data-toggle="datetimepicker">
-                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 {{-- search --}}
                                 <div class="col-1">
                                     <div class="form-group">
@@ -62,17 +39,47 @@
                     <table class="table user-table">
                         <thead>
                         <tr>
-
+                            <th>{{ trans('No.') }}</th>
+                            <th>{{ trans('Nhân viên') }}</th>
+                            <th>{{ trans('Thu nhập chịu thuế') }}</th>
+                            <th>{{ trans('Giờ công định mức') }}</th>
+                            <th>{{ trans('Giờ công thực tế') }}</th>
+                            <th>{{ trans('Thuế') }}</th>
+                            <th>{{ trans('Bảo hiểm') }}</th>
+                            <th>{{ trans('Tạm ứng') }}</th>
+                            <th>{{ trans('Thưởng') }}</th>
+                            <th>{{ trans('Thực nhận') }}</th>
                         </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $i = $salaries->firstItem();
+                            @endphp
+                            @forelse ($salaries as $salary)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $salary->user->name }}</td>
+                                    <td>{{ $salary->gross }}</td>
+                                    <td>{{ $salary->required_time }}</td>
+                                    <td>{{ $salary->total_time }}</td>
+                                    <td>{{ $salary->tax }}</td>
+                                    <td>{{ $salary->insurance }}</td>
+                                    <td>{{ $salary->advance_payment }}</td>
+                                    <td>{{ $salary->reward }}</td>
+                                    <td>{{ $salary->NET }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="10">Chưa có dữ liệu lương tháng này. Vui lòng bấm nút tính lương để tính toán.</td>
+                                </tr>
+                            @endforelse
 
                         </tbody>
                     </table>
                 </div>
 
                 <div class="pagination justify-content-center">
-
+                    {{ $salaries->appends([$_GET])->links() }}
                 </div>
             </div>
         </div>
