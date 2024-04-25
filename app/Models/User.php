@@ -95,4 +95,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Timesheet::class);
     }
+
+    public function advancePayment()
+    {
+        return $this->hasMany(AdvancePayment::class);
+    }
 }

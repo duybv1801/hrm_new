@@ -15,11 +15,11 @@ class CreateSalariesTable extends Migration
     {
         Schema::create('salaries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedTinyInteger('user_id');
-            $table->date('time');
+            $table->unsignedBigInteger('user_id');
+            $table->string('time', 7);
             $table->unsignedInteger('gross');
-            $table->float('required_time', 3, 2);
-            $table->float('total_time', 3, 2);
+            $table->float('required_time');
+            $table->float('total_time');
             $table->unsignedInteger('tax')->default(0)->nullable();
             $table->unsignedInteger('insurance')->default(0)->nullable();
             $table->unsignedInteger('advance_payment')->default(0)->nullable();

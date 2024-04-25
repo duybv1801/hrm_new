@@ -66,7 +66,7 @@
                                     <td>{{ number_format($salary->insurance, 0, ',', '.') }}đ</td>
                                     <td>{{ number_format($salary->advance_payment, 0, ',', '.') }}đ</td>
                                     <td>{{ number_format($salary->reward, 0, ',', '.') }}đ</td>
-                                    <td>{{ number_format($salary->NET, 0, ',', '.') }}đ</td>
+                                    <td>{{ number_format($salary->net, 0, ',', '.') }}đ</td>
                                 </tr>
                             @empty
                                 <tr>
@@ -79,9 +79,7 @@
                 </div>
 
                 <div class="pagination justify-content-center">
-                    {{ $salaries->appends([
-                            'time' => request()->input('time'),
-                        ])->links() }}
+                    {{ $salaries->withQueryString()->links() }}
                 </div>
             </div>
         </div>

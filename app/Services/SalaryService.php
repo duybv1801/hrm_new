@@ -56,7 +56,7 @@ class SalaryService
                     'gross' => $gross,
                     'tax' => $tax,
                     'insurance' => $insurance,
-                    'NET' => $gross - $tax - $insurance + $user['allowance'],
+                    'net' => $gross - $tax - $insurance + $user['allowance'],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];

@@ -31,7 +31,7 @@ class SalaryPolicy
      */
     public function view(User $user, Salary $salary)
     {
-        return true;
+        return $user->hasAnyRole(['admin', 'accouter']);
     }
 
     /**
@@ -42,7 +42,7 @@ class SalaryPolicy
      */
     public function create(User $user)
     {
-        return true;
+        return $user->hasAnyRole(['admin', 'accouter']);
     }
 
     /**

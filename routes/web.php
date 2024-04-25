@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdvancePaymentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
@@ -135,8 +136,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/overtimes/details/{id}', [OvertimeController::class, 'details'])->name('overtimes.details')->middleware('can:details,App\Models\Overtime,id');
 
     //salary
-    Route::get('/salaries', [SalaryController::class, 'index'])->name('salaries.index');
-    Route::post('/salaries/cal', [SalaryController::class, 'calSalary'])->name('salaries.cal');
+    Route::get('/salaries', [SalaryController::class, 'index'])->name('salaries.index')->middleware('can:viewAny,App\Models\Salary');
+    Route::post('/salaries/cal', [SalaryController::class, 'calSalary'])->name('salaries.cal')->middleware('can:viewAny,App\Models\Salary');;
+    Route::get('/advance_payments', [AdvancePaymentController::class, 'index'])->name('advance_payments.index');
+    Route::get('/advance_payments/create', [AdvancePaymentController::class, 'create'])->name('advance_payments.create');
 });
 
 //password mail

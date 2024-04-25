@@ -238,7 +238,7 @@
 </li>
 
 {{-- Salary --}}
-<li class="nav-item {{ Request::is('salaries*') ? 'active menu-open' : '' }}">
+<li class="nav-item {{ Request::is('salaries*') || Request::is('advance_payments*') ? 'active menu-open' : '' }}">
     @can('viewAny', App\Models\Salary::class)
         <a href="#" class="nav-link">
             <i class="fas fa-dollar-sign"></i>
@@ -249,7 +249,7 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="" class="nav-link {{ Request::is('salaries/aaa') ? 'active' : '' }}">
+                <a href="{!! route('advance_payments.index') !!}" class="nav-link {{ Request::is('advance_payments/') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p> {{ trans('Tạm ứng') }}</p>
 {{--                    <span class=" badge bg-danger">--}}
@@ -278,11 +278,11 @@
             </li>
         </ul>
     @else
-        <a href="{!! route('salaries.index') !!}" class="nav-link"
+        <a href="{!! route('advance_payments.index') !!}" class="nav-link"
            title="{{ trans('Number of applications that have not been approved/confirmed') }}">
-            <i class="fas fa-toggle-off"></i>
+            <i class="fas fa-dollar-sign"></i>
             <p>
-                {{ trans('salary') }}
+                {{ trans('Tạm ứng') }}
             </p>
         </a>
     @endcan

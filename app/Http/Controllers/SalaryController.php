@@ -8,6 +8,7 @@ use App\Repositories\UserRepository;
 use App\Services\SalaryService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Laracasts\Flash\Flash;
 
 class SalaryController extends Controller
@@ -25,7 +26,7 @@ class SalaryController extends Controller
         $this->salaryRepository = $salaryRepo;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\View\View
     {
         $time = $request->time ?: Carbon::now()->subMonth()->format('Y-m');
         $conditions = [
