@@ -24,7 +24,7 @@ class AdvancePaymentRepository extends BaseRepository
         return AdvancePayment::class;
     }
 
-    public function searchByConditions($search, $userIds = [])
+    public function searchByConditions($search)
     {
         $query = $this->model;
         if (count($search)) {
@@ -43,9 +43,6 @@ class AdvancePaymentRepository extends BaseRepository
                         break;
                 }
             }
-        }
-        if ($userIds != null) {
-            $query = $query->whereIn('user_id', $userIds);
         }
 
         return $query->with('user')->orderBy('status', 'ASC')->paginate(config('define.paginate'));

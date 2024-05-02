@@ -14,9 +14,9 @@ class AdvancePayment extends Model
         'payments', 'money', 'bank', 'account_number'
     ];
 
-    protected $casts = [
-        'time'  => 'date:d-m-Y'
-    ];
+//    protected $casts = [
+//        'time'  => 'date:m-Y'
+//    ];
 
     public function user()
     {

@@ -249,7 +249,7 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{!! route('advance_payments.index') !!}" class="nav-link {{ Request::is('advance_payments/') ? 'active' : '' }}">
+                <a href="{!! route('advance_payments.index') !!}" class="nav-link {{ Request::is('advance_payments') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p> {{ trans('Tạm ứng') }}</p>
 {{--                    <span class=" badge bg-danger">--}}
@@ -259,7 +259,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link {{ Request::is('salaries/manage') ? 'active' : '' }}">
+                <a href="{!! route('advance_payments.manage') !!}" class="nav-link {{ Request::is('advance_payments/manage') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p> {{ trans('Duyệt tạm ứng') }}
                         @if (Auth::user()->hasRole('po'))

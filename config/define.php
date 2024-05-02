@@ -27,6 +27,11 @@ return [
         'normal'        => '1',
         'reconfirm'     => '2',
     ],
+    'advance_payment'         => [
+        'pending'        => '1',
+        'confirm'        => '2',
+        'cancel'         => '3',
+    ],
     'time'              => 'H:i',
     'date_img'          => 'Y/m/d',
     'remotes'           => [

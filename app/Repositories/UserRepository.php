@@ -39,8 +39,10 @@ class UserRepository extends BaseRepository
         'role_id',
         'team_id',
         'leave_hours_left',
-        'leave_hours_left_in_month'
-
+        'leave_hours_left_in_month',
+        'account_number',
+        'base_salary',
+        'allowance',
     ];
 
     /**
@@ -67,7 +69,7 @@ class UserRepository extends BaseRepository
         if (isset($search['query'])) {
             $query = $query->where('code', 'like', '%' . $search['query'] . '%');
         }
-        $query = $query->orderBy('created_at', 'DESC');
+        $query = $query->orderBy('id');
         return $query->paginate(config('define.paginate'));
     }
 

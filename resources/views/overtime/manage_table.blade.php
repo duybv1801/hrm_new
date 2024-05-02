@@ -49,7 +49,7 @@
                                         <div class="input-group">
                                             <input type="search" class="form-control"
                                                 placeholder="{{ trans('overtime.user') }}" name="query" id="user"
-                                                value="{{ request('query') ? request('query') : '' }}">
+                                                value="{{ request('query') ?? '' }}">
                                         </div>
                                     </div>
                                 </div>

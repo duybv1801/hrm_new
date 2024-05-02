@@ -66,18 +66,6 @@
                 value="{{ $user->birthday }}" />
         </div>
 
-
-        <!-- Submit Field -->
-        <div class="form-group col-sm-5 ">
-            {!! Form::submit(trans('Save'), ['class' => 'btn btn-primary']) !!}
-            <a href="{!! route('manager_staff.index') !!}" class="btn btn-default">{{ trans('Cancel') }}</a>
-        </div>
-    </div>
-
-
-
-    <div class="col-md-5 mx-auto">
-
         <!-- Gender Field -->
         <div class="form-group row">
             <label class="col-sm-5 control-label" for="gender">{{ trans('staff.genders.name') }}</label>
@@ -92,6 +80,17 @@
                 </option>
             </select>
         </div>
+
+        <!-- Submit Field -->
+        <div class="form-group col-sm-5 ">
+            {!! Form::submit(trans('Save'), ['class' => 'btn btn-primary']) !!}
+            <a href="{!! route('manager_staff.index') !!}" class="btn btn-default">{{ trans('Cancel') }}</a>
+        </div>
+    </div>
+
+
+
+    <div class="col-md-5 mx-auto">
 
         <!-- Dependent Person Field -->
         <div class="form-group row">
@@ -210,6 +209,18 @@
                     {{ $user->role_id == config('define.role.po') ? 'selected' : '' }}>{{ trans('staff.role.po') }}
                 </option>
             </select>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-5 control-label" for="birthday">{{ trans('Lương cơ bản') }}</label>
+            <input type="number" name="base_salary" id="base_salary" class="form-control col-sm-5"
+                   value="{{ $user->base_salary }}" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-5 control-label" for="birthday">{{ trans('Trợ cấp') }}</label>
+            <input type="number" name="allowance" id="allowance" class="form-control col-sm-5"
+                   value="{{ $user->allowance }}" />
         </div>
     </div>
 

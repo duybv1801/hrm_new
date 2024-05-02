@@ -137,7 +137,7 @@
                                                     <i class="glyphicon glyphicon-edit"></i>{{ trans('Edit') }}
                                                 </a>
                                                 <button class="btn btn-danger btn-sm" data-toggle="modal"
-                                                    data-target="#cancelModal">
+                                                    data-target="#cancelModal" data-id="{{ $overtime->id }}">
                                                     <i class="glyphicon glyphicon-trash"></i>{{ trans('Cancel') }}
                                                 </button>
                                             @endif
@@ -156,7 +156,7 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        {!! Form::open(['route' => ['overtimes.cancel', $overtime->id], 'method' => 'put']) !!}
+                                                        {!! Form::open(['route' => ['overtimes.cancel', ['id' => $overtime->id]], 'method' => 'put']) !!}
                                                         <div class="form-group">
                                                             <label
                                                                 for="cancelReason">{{ trans('overtime.cancel_reason') }}
