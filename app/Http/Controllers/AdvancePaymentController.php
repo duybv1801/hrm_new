@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\createPaymentRequest;
 use App\Models\AdvancePayment;
 use App\Repositories\AdvancePaymentRepository;
 use App\Repositories\UserRepository;
@@ -24,7 +25,7 @@ class AdvancePaymentController extends Controller
 
     public function index(Request $request): \Illuminate\View\View
     {
-        $time = $request->time ?: Carbon::now()->format('Y-m');
+        $time = $request->time ?? now()->format('Y-m');
         $conditions = [
             'time' => $time,
             'user_id' => Auth::id(),
@@ -50,11 +51,11 @@ class AdvancePaymentController extends Controller
     public function create(): \Illuminate\View\View
     {
         $user = $this->userRepository->find( Auth::id(),  'base_salary');
-        $baseSalary = $user->base_salary;
+        $baseSalary = $user->base_salary /2;
         return view('advance_payment.create', compact('baseSalary'));
     }
 
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(createPaymentRequest $request): \Illuminate\Http\RedirectResponse
     {
         $data['user_id'] = Auth::id();
         $data['time'] = $request->time;

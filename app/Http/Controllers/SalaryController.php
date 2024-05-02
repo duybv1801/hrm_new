@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessNegativeSalaries;
 use App\Repositories\SalaryRepository;
 use App\Repositories\UserRepository;
 use App\Services\SalaryService;
@@ -45,9 +46,10 @@ class SalaryController extends Controller
         $end = Carbon::createFromFormat('Y-m', $request->time)->endOfMonth();
         $userIds = $request->has('user_ids') ? $request->user_ids : null;
 
-        $users = $this->userRepository->getUserCalSalary($userIds, $start, $end);
+        $users = $this->userRepository->getUserCalSalary($userIds, $start, $end, $request->time);
         $totalHours = calTotalHours($start, $end);
         if($this->salaryService->calAndStoreSalaries($users, $userIds, $totalHours, $end)) {
+            ProcessNegativeSalaries::dispatch($request->time);
             Flash::success(trans('Tính lương thành công'));
             return redirect()->route('salaries.index');
         }

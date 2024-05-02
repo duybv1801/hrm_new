@@ -151,6 +151,9 @@ return [
         'total_hours' => [
             'min' => 'Trường :attribute phải làm ít nhất 1 giờ.',
         ],
+        'user_id' => [
+            'unique' => 'Mỗi tháng chỉ được tạo 1 đơn tạm ứng'
+        ]
     ],
     'attributes'           => [
         'address'               => 'địa chỉ',

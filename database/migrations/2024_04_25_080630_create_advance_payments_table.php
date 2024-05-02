@@ -16,16 +16,15 @@ class CreateAdvancePaymentsTable extends Migration
         Schema::create('advance_payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->date('time');
+            $table->string('time');
             $table->string('reason');
             $table->unsignedTinyInteger('payments');
             $table->unsignedInteger('money');
             $table->string('bank')->nullable();
             $table->string('account_number')->nullable();
-            $table->unsignedBigInteger('approver_id');
             $table->unsignedTinyInteger('status');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('approver_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unique(['user_id', 'time']);
             $table->timestamps();
         });
     }

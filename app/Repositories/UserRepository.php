@@ -102,15 +102,22 @@ class UserRepository extends BaseRepository
         return $this->model->whereIn('code', $code)->get();
     }
 
-    public function getUserCalSalary($ids = null, $start, $end): array
+    public function getUserCalSalary($ids = null, $start, $end, $time): array
     {
         $start = $start->format('Y-m-d');
         $end = $end->format('Y-m-d');
 
-        $query = $this->model->with(['timesheets' => function ($query) use ($start, $end) {
-            $query->whereBetween('record_date', [$start, $end])
-                ->select('user_id', 'working_hours', 'overtime_hours', 'leave_hours');
-        }])
+        $query = $this->model->with([
+            'timesheets' => function ($query) use ($start, $end) {
+                $query->whereBetween('record_date', [$start, $end])
+                    ->select('user_id', 'working_hours', 'overtime_hours', 'leave_hours');
+            },
+            'advancePayment' => function ($query) use ($time) {
+                $query->where('time', $time)
+                    ->where('status', 2)
+                    ->select('user_id', 'money');
+            }
+        ])
             ->select('id', 'name', 'base_salary', 'allowance', 'contract', 'dependent_person');
 
         if (!is_null($ids)) {

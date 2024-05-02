@@ -18,6 +18,7 @@ class SalaryService
             $this->delErrorSalaries($userIds, $time);
             $dataToInsert = [];
             foreach ($users as $user) {
+                $advancePayment = $user['advance_payment'][0]['money'] ?? 0;
                 $totalWorkingHours = 0;
                 $totalOTHours = 0;
                 $totalLeaveHours = 0;
@@ -48,6 +49,7 @@ class SalaryService
                     $tax = $user['base_salary'] * 0.1;
                     $insurance = 0;
                 }
+
                 $dataToInsert[] = [
                     'user_id' => $user['id'],
                     'time' => $end->format('Y-m'),
@@ -56,7 +58,8 @@ class SalaryService
                     'gross' => $gross,
                     'tax' => $tax,
                     'insurance' => $insurance,
-                    'net' => $gross - $tax - $insurance + $user['allowance'],
+                    'advance_payment' => $advancePayment,
+                    'net' => $gross - $tax - $insurance + $user['allowance'] - $advancePayment,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];

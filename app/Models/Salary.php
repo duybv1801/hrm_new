@@ -11,7 +11,7 @@ class Salary extends Model
 
     public $fillable = [
         'user_id', 'time', 'gross', 'tax', 'insurance',
-        'advance_payment', 'reward', 'NET'
+        'advance_payment', 'reward', 'net'
     ];
 
     public function user()

@@ -88,6 +88,7 @@
                                                     <input type="text" class="form-control" name="account_number" id="account_number" required>
                                                 </div>
                                             </div>
+                                            <input type="hidden" class="" name="user_id" id="user_id" value="{{ Illuminate\Support\Facades\Auth::id() }}">
 
                                             <!-- Submit Field -->
                                             <div class="form-group row">
