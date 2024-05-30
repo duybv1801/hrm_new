@@ -101,7 +101,7 @@
                                         {{ trans('Remaining vacation time') }}: {{ Auth::user()->leave_hours_left }}h
                                     </span>
                                     @if (Auth::user()->leave_hours_left_in_month != 0)
-                                        {{ trans('Remaining leave time by month') }}:
+                                        {{ trans('Phép đặc biệt theo tháng còn lại') }}:
                                         {{ Auth::user()->leave_hours_left_in_month }}h
                                     @endif
                                     <span style="margin-right: 30px" class="float-right">

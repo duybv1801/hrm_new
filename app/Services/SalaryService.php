@@ -19,6 +19,7 @@ class SalaryService
             $dataToInsert = [];
             foreach ($users as $user) {
                 $advancePayment = $user['advance_payment'][0]['money'] ?? 0;
+                $reward = $user['reward'][0]['total_money'] ?? 0;
                 $totalWorkingHours = 0;
                 $totalOTHours = 0;
                 $totalLeaveHours = 0;
@@ -32,7 +33,12 @@ class SalaryService
                 $gross = $user['base_salary'] * $totalTime/$totalHours;
 
                 $insurance = $user['base_salary'] * 0.105;
-                $taxDependent = $gross - 11000000 - $user['dependent_person'] * 4400000;
+                if ($user['base_salary'] > 2000000 && in_array($user['contract'], [1, 3])) {
+                    $tax = $user['base_salary'] * 0.1;
+                    $insurance = 0;
+                }
+
+                $taxDependent = $gross - 11000000 - $user['dependent_person'] * 4400000 + $reward - $insurance + $user['allowance'] * 0.5;
                 if ($taxDependent > 0) {
                     $taxRanges = [5000000, 10000000, 18000000, 32000000, 52000000, 80000000];
                     $percentage = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35];
@@ -45,10 +51,6 @@ class SalaryService
                 } else{
                     $tax = 0;
                 }
-                if($user['base_salary'] > 2000000 && in_array($user['contract'], [1, 3])) {
-                    $tax = $user['base_salary'] * 0.1;
-                    $insurance = 0;
-                }
 
                 $dataToInsert[] = [
                     'user_id' => $user['id'],
@@ -59,7 +61,8 @@ class SalaryService
                     'tax' => $tax,
                     'insurance' => $insurance,
                     'advance_payment' => $advancePayment,
-                    'net' => $gross - $tax - $insurance + $user['allowance'] - $advancePayment,
+                    'reward' => $reward,
+                    'net' => $gross - $tax - $insurance + $user['allowance'] - $advancePayment + $reward,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];

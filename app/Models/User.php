@@ -100,4 +100,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(AdvancePayment::class);
     }
+
+    public function reward()
+    {
+        return $this->hasMany(Reward::class);
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Repositories;
@@ -7,6 +8,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class UserRepository
@@ -116,9 +118,41 @@ class UserRepository extends BaseRepository
                 $query->where('time', $time)
                     ->where('status', 2)
                     ->select('user_id', 'money');
+            },
+            'reward' => function ($query) use ($time) {
+                $query->where('time', $time)
+                    ->select('user_id')
+                    ->selectRaw('SUM(money) as total_money')
+                    ->groupBy('user_id');
             }
         ])
             ->select('id', 'name', 'base_salary', 'allowance', 'contract', 'dependent_person');
+
+        if (!is_null($ids)) {
+            $query->whereIn('id', $ids);
+        }
+
+        return $query->get()->toArray();
+    }
+
+    public function getUserExportSalary($ids = null, $start, $end, $time)
+    {
+        $start = $start->format('Y-m-d');
+        $end = $end->format('Y-m-d');
+        $query = $this->model->with([
+            'timesheets' => function ($query) use ($start, $end) {
+                $query->whereBetween('record_date', [$start, $end])
+                ->select('user_id', DB::raw('SUM(working_hours) as total_working_hours'), 
+                DB::raw('SUM(overtime_hours) as total_overtime_hours'), 
+                DB::raw('SUM(leave_hours) as total_leave_hours'))
+                ->groupBy('user_id');
+            },
+            'salaries' => function ($query) use ($time) {
+                $query->where('time', $time);
+            },
+            'roles'
+        ])
+            ->select('id', 'name','code','account_number', 'base_salary', 'allowance', 'contract', 'dependent_person');
 
         if (!is_null($ids)) {
             $query->whereIn('id', $ids);

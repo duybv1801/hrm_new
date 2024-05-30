@@ -39,7 +39,7 @@
             <label class="col-sm-4 col-form-label" for="total">{{ trans('remote.total_hours') }}</label>
             <div class="col-sm-8">
                 <input type="text" id="total" name="total"
-                    value="{{ round($managerLeaves->total_hours / config('define.hour'), config('define.decimal')) }}"
+                    value="{{ $managerLeaves->total_hours }}"
                     class="form-control" readonly />
             </div>
         </div>

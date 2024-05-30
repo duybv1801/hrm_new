@@ -43,7 +43,7 @@
         </div>
 
         <!-- total Field -->
-        <div class="form-group row">
+        <div class="form-group row" style="display: none;">
             <label class="col-sm-4 col-form-label" for="total">{{ trans('remote.total_hours') }}</label>
             <div class="col-sm-8">
                 <input type="text" id="total" name="total" class="form-control" readonly />

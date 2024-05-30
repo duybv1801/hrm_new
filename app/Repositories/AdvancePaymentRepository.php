@@ -7,7 +7,10 @@ use Illuminate\Support\Carbon;
 
 class AdvancePaymentRepository extends BaseRepository
 {
-    protected $fieldSearchable = [];
+    protected $fieldSearchable = [
+        'user_id', 'time', 'reason', 'status',
+        'payments', 'money', 'bank', 'account_number'
+    ];
     /**
      * @inheritDoc
      */

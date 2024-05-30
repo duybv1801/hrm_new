@@ -17,6 +17,7 @@ use App\Http\Controllers\OvertimeController;
 use App\Http\Controllers\ManagerLeaveController;
 use App\Http\Controllers\InOutController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\RewardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -137,15 +138,20 @@ Route::middleware(['auth'])->group(function () {
 
     //salary
     Route::get('/salaries', [SalaryController::class, 'index'])->name('salaries.index')->middleware('can:viewAny,App\Models\Salary');
-    Route::post('/salaries/cal', [SalaryController::class, 'calSalary'])->name('salaries.cal')->middleware('can:viewAny,App\Models\Salary');;
+    Route::post('/salaries/cal', [SalaryController::class, 'calSalary'])->name('salaries.cal')->middleware('can:viewAny,App\Models\Salary');
+    Route::post('/salaries/export', [SalaryController::class, 'export'])->name('salaries.export')->middleware('can:viewAny,App\Models\Salary');
     Route::get('/advance_payments', [AdvancePaymentController::class, 'index'])->name('advance_payments.index');
     Route::get('/advance_payments/create', [AdvancePaymentController::class, 'create'])->name('advance_payments.create');
     Route::post('/advance_payments/store', [AdvancePaymentController::class, 'store'])->name('advance_payments.store');
     Route::get('/advance_payments/detail/{id}', [AdvancePaymentController::class, 'show'])->name('advance_payments.detail');
-    Route::get('/advance_payments/edit/{id}', [AdvancePaymentController::class, 'edit'])->name('advance_payments.edit')->middleware('can:viewAny,App\Models\Salary');;
-    Route::put('/advance_payments/update/{id}', [AdvancePaymentController::class, 'update'])->name('advance_payments.update')->middleware('can:viewAny,App\Models\Salary');;
+    Route::get('/advance_payments/edit/{id}', [AdvancePaymentController::class, 'edit'])->name('advance_payments.edit')->middleware('can:viewAny,App\Models\Salary');
+    Route::put('/advance_payments/update/{id}', [AdvancePaymentController::class, 'update'])->name('advance_payments.update')->middleware('can:viewAny,App\Models\Salary');
     Route::put('/advance_payments/cancel/{id}', [AdvancePaymentController::class, 'destroy'])->name('advance_payments.cancel');
-    Route::get('/advance_payments/manage', [AdvancePaymentController::class, 'manage'])->name('advance_payments.manage')->middleware('can:viewAny,App\Models\Salary');;
+    Route::get('/advance_payments/manage', [AdvancePaymentController::class, 'manage'])->name('advance_payments.manage')->middleware('can:viewAny,App\Models\Salary');
+    Route::get('/reward', [RewardController::class, 'index'])->name('reward.index')->middleware('can:viewAny,App\Models\Salary');
+    Route::post('/reward/import', [RewardController::class, 'import'])->name('reward.import')->middleware('can:viewAny,App\Models\Salary');;
+    Route::put('/reward/update/{id}', [RewardController::class, 'update'])->name('reward.update')->middleware('can:viewAny,App\Models\Salary');
+    Route::delete('/reward/{id}', [RewardController::class, 'destroy'])->name('reward.destroy')->middleware('can:viewAny,App\Models\Salary');
 });
 
 //password mail

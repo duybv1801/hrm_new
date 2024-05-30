@@ -91,23 +91,21 @@ class HomeController extends Controller
             $overtimeHours = '0';
             $timesheet = $timesheetMap[$date] ?? null;
             $currentDate = Carbon::createFromFormat(config('define.date_show'), $date);
-            if ($currentDate->isWeekend() && !$timesheet) {
+            if ($currentDate->isWeekend() && !$timesheet || $this->isHoliday($date, $conditions) && !$timesheet) {
                 continue;
             }
+            
             if ($timesheet) {
                 $checkIn = Carbon::parse($timesheet->in_time)->format(config('define.time'));
                 $checkOut = Carbon::parse($timesheet->out_time)->format(config('define.time'));
                 $workingHours = $timesheet->working_hours;
                 $overtimeHours = $timesheet->overtime_hours;
-                $leaveHours = round($timesheet->leave_hours / config('define.hour'), config('define.decimal'));
+                $leaveHours = $timesheet->leave_hours;
                 $status = $timesheet->status;
             } else {
                 $status = config('define.timesheet.reconfirm');
             }
-            if ($this->isHoliday($date, $conditions)) {
-                $leaveHours = $hourPerDay;
-                $status = config('define.timesheet.normal');
-            }
+            
             $data['timesheetData'][] = [
                 'name' => Auth::user()->name,
                 'date' => $date,

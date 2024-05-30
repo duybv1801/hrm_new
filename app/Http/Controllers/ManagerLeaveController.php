@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Traits\HasPermission;
 use App\Repositories\LeaveRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\TimesheetRepository;
 use Laracasts\Flash\Flash;
 use App\Mail\ApproveEmail;
 use Illuminate\Support\Facades\Mail;
@@ -18,10 +19,15 @@ class ManagerLeaveController extends AppBaseController
     use HasPermission;
     private $leaveRepository, $userReponsitory;
 
-    public function __construct(LeaveRepository $leaveRepo, UserRepository $userRepo)
+    public function __construct(
+        LeaveRepository $leaveRepo, 
+        UserRepository $userRepo,
+        TimesheetRepository $timesheetRepository
+        )
     {
         $this->leaveRepository = $leaveRepo;
         $this->userReponsitory = $userRepo;
+        $this->timesheetRepository = $timesheetRepository;
     }
 
     public function index(Request $request)
@@ -107,6 +113,7 @@ class ManagerLeaveController extends AppBaseController
 //            Mail::to($email)->send(new ApproveEmail('Approved', $comment));
             $managerLeaves->status = config('define.leaves.approved');
             $managerLeaves->save();
+            $this->timesheetRepository->updateLeave($managerLeaves);
         } elseif ($status === config('define.leaves.rejected')) {
             if ($managerLeaves->type == config('define.type.paid_leave')) {
                 $getName = $managerLeaves->user_id;

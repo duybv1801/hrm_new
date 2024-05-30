@@ -238,7 +238,7 @@
 </li>
 
 {{-- Salary --}}
-<li class="nav-item {{ Request::is('salaries*') || Request::is('advance_payments*') ? 'active menu-open' : '' }}">
+<li class="nav-item {{ Request::is('salaries*') || Request::is('advance_payments*') || Request::is('reward*')  ? 'active menu-open' : '' }}">
     @can('viewAny', App\Models\Salary::class)
         <a href="#" class="nav-link">
             <i class="fas fa-dollar-sign"></i>
@@ -268,6 +268,12 @@
 {{--                            </span>--}}
                         @endif
                     </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{!! route('reward.index') !!}" class="nav-link {{ Request::is('reward') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p> {{ trans('Thưởng') }}</p>
                 </a>
             </li>
             <li class="nav-item">
